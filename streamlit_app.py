@@ -3,11 +3,11 @@ import re
 import streamlit as st
 import os
 
-def extract_coverage_from_report(text_file_path):
+def extract_coverage_from_report(text_file):
     coverage_data = {}
     
-    with open(text_file_path, 'r', encoding='utf-8', errors='ignore') as file:
-        text_content = file.read()
+    # Lire le contenu du fichier directement à partir de l'objet UploadedFile
+    text_content = text_file.getvalue().decode('utf-8', errors='ignore')
     
     # Patterns pour trouver les informations de coverage dans le rapport
     # Cherche les patterns comme "Test Summary for U10 (MC14519)" suivi de "Totals:" et "100.00%"
@@ -19,11 +19,13 @@ def extract_coverage_from_report(text_file_path):
     
     return coverage_data
 
-def update_excel_with_coverage(excel_file_path, coverage_data, output_file=None):
-    if excel_file_path.endswith('.csv'):
-        df = pd.read_csv(excel_file_path)
+def update_excel_with_coverage(excel_file, coverage_data):
+    # Lire directement à partir de l'objet UploadedFile
+    if excel_file.name.endswith('.csv'):
+        df = pd.read_csv(excel_file)
     else:
-        df = pd.read_excel(excel_file_path)
+        # Lire avec pandas pour la manipulation des données
+        df = pd.read_excel(excel_file)
     
     if "COVERAGE %" not in df.columns:
         df["COVERAGE %"] = None
@@ -35,13 +37,7 @@ def update_excel_with_coverage(excel_file_path, coverage_data, output_file=None)
         else:
             df.at[index, "COVERAGE %"] = "0%"
     
-    if output_file is None:
-        base_name = os.path.splitext(excel_file_path)[0]
-        output_file = f"{base_name}_updated.xlsx"
-    
-    df.to_excel(output_file, index=False)
-    
-    return df, output_file
+    return df
 
 def main():
     st.set_page_config(page_title="Coverage Excel Update", layout="wide")
@@ -64,48 +60,90 @@ def main():
         text_file = st.file_uploader("Choisissez un fichier texte de rapport", type=["txt"])
     
     if excel_file is not None and text_file is not None:
-        # Sauvegarde des fichiers téléchargés temporairement
-        excel_temp_path = os.path.join(os.getcwd(), excel_file.name)
-        text_temp_path = os.path.join(os.getcwd(), text_file.name)
+        # Utilisation d'un gestionnaire de contexte pour les fichiers temporaires
+        import tempfile
         
-        with open(excel_temp_path, "wb") as f:
-            f.write(excel_file.getbuffer())
-            
-        with open(text_temp_path, "wb") as f:
-            f.write(text_file.getbuffer())
+        # Traiter directement les fichiers sans sauvegarde temporaire
             
         # Bouton pour traiter les fichiers
         if st.button("Traiter les fichiers", type="primary"):
             with st.spinner("Traitement des fichiers en cours..."):
                 try:
-                    coverage_data = extract_coverage_from_report(text_temp_path)
+                    coverage_data = extract_coverage_from_report(text_file)
                     
                     if not coverage_data:
                         st.error("Aucune donnée de couverture trouvée dans le fichier texte")
                     else:
-                        updated_df, output_file = update_excel_with_coverage(excel_temp_path, coverage_data)
+                        updated_df = update_excel_with_coverage(excel_file, coverage_data)
                         
                         # Affichage d'un aperçu du résultat
-                        st.success(f"Traitement terminé! Fichier sauvegardé sous: {output_file}")
+                        st.success(f"Traitement terminé!")
                         
                         # Afficher l'aperçu du DataFrame
                         st.subheader("Aperçu du fichier mis à jour")
                         st.dataframe(updated_df)
                         
-                        # Téléchargement du fichier mis à jour
-                        with open(output_file, "rb") as f:
+                        # Préparer le fichier pour téléchargement en conservant le format original
+                        import io
+                        import openpyxl
+                        
+                        if excel_file.name.endswith('.xlsx'):
+                            # Reset la position du fichier uploadé
+                            excel_file.seek(0)
+                            
+                            # Charger le workbook original directement depuis l'objet UploadedFile
+                            wb = openpyxl.load_workbook(excel_file)
+                            sheet_name = wb.sheetnames[0]
+                            sheet = wb[sheet_name]
+                            
+                            # Mettre à jour uniquement la colonne "COVERAGE %"
+                            # Trouver l'index de la colonne COVERAGE %
+                            header_row = list(sheet.iter_rows(min_row=1, max_row=1, values_only=True))[0]
+                            try:
+                                coverage_col_idx = header_row.index("COVERAGE %") + 1  # +1 car openpyxl est indexé à partir de 1
+                            except ValueError:
+                                # Si la colonne n'existe pas, l'ajouter
+                                coverage_col_idx = len(header_row) + 1
+                                sheet.cell(row=1, column=coverage_col_idx, value="COVERAGE %")
+                            
+                            # Mettre à jour les valeurs
+                            for i, row in enumerate(sheet.iter_rows(min_row=2)):
+                                if i < len(updated_df):
+                                    comp = updated_df.iloc[i]["COMP."]
+                                    coverage = updated_df.iloc[i]["COVERAGE %"]
+                                    sheet.cell(row=i+2, column=coverage_col_idx, value=coverage)
+                            
+                            # Convertir le workbook en bytes pour le téléchargement
+                            output = io.BytesIO()
+                            wb.save(output)
+                            output.seek(0)
+                            
+                            file_name = excel_file.name.replace('.xlsx', '_updated.xlsx')
+                            
                             st.download_button(
                                 label="Télécharger le fichier mis à jour",
-                                data=f,
-                                file_name=os.path.basename(output_file),
+                                data=output,
+                                file_name=file_name,
                                 mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                            )
+                        else:
+                            # Pour les CSV, utiliser pandas
+                            csv_buffer = io.StringIO()
+                            updated_df.to_csv(csv_buffer, index=False)
+                            
+                            file_name = excel_file.name.replace('.csv', '_updated.csv')
+                            
+                            st.download_button(
+                                label="Télécharger le fichier mis à jour",
+                                data=csv_buffer.getvalue(),
+                                file_name=file_name,
+                                mime="text/csv"
                             )
                         
                 except Exception as e:
                     st.error(f"Erreur lors du traitement: {str(e)}")
         
-        # Nettoyage des fichiers temporaires
-        st.text("Note: Les fichiers téléchargés seront automatiquement supprimés après utilisation.")
+        st.text("Note: Les fichiers sont traités directement en mémoire et ne sont pas sauvegardés sur le serveur.")
 
 if __name__ == "__main__":
     main()
