@@ -2,6 +2,8 @@
 
 Une application simple pour mettre à jour un fichier Excel avec des données de couverture de test extraites d'un rapport texte.
 
+![GIF de présentation](presentation.gif)
+
 ## Version en ligne
 
 Vous pouvez accéder à l'application Streamlit en ligne ici : [https://josselinperret-excel-completer-streamlit-app-7ep3fi.streamlit.app/](https://josselinperret-excel-completer-streamlit-app-7ep3fi.streamlit.app/)
