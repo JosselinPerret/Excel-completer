@@ -1149,10 +1149,10 @@ VAR     - Variant component.
 *       FAIL  FAIL_LO (Default Quality Criteria used)                                                                                   
 
  D17_BREAKFW          Units = Volts   Hi lim = 13.2     Lo lim = 10.8          
-        PASS  (J;„ 4„N	 Quality Criteria used)                                                                                   
+        PASS  (J;  4 N	 Quality Criteria used)                                                                                   
 
  D17_BREAKREV         Units = Volts   Hi lim = 13.2     Lo lim = 10.8          
-        PASS  (<„ 4„y Quality Criteria used)
+        PASS  (<  4 y Quality Criteria used)
 -----------------------------------------------------------------------
  Test Summary for: D18    (116867 )
                                                                                    
@@ -1341,11 +1341,11 @@ VAR     - Variant component.
 *       FAIL  FAIL_LO (Default Quality Criteria used)                                                                                   
 
  D47_BREAKFW          Units = Volts   Hi lim = 13.2     Lo lim = 10.8          
-        PASS  (î9„ 4„ª
+        PASS  ( 9  4  
  Quality Criteria used)                                                                                   
 
  D47_BREAKREV         Units = Volts   Hi lim = 13.2     Lo lim = 10.8          
-        PASS  (Ã:„ 4„Õ	 Quality Criteria used)
+        PASS  ( :  4  	 Quality Criteria used)
 -----------------------------------------------------------------------
  Test Summary for: D5    (116867 )
                                                                                    
