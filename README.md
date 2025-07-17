@@ -1,87 +1,120 @@
-# Excel Completer
+# 📊 Excel Completer
 
-Une application simple pour mettre à jour un fichier Excel avec des données de couverture de test extraites d'un rapport texte.
+<div align="center">
+
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://josselinperret-excel-completer-streamlit-app-7ep3fi.streamlit.app/)
+[![Python](https://img.shields.io/badge/Python-3.6+-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+**Une application élégante pour automatiser la mise à jour de vos fichiers Excel avec des données de couverture de test.**
 
 ![GIF de présentation](presentation.gif)
 
-## Version en ligne
+[🌐 Application en ligne](https://josselinperret-excel-completer-streamlit-app-7ep3fi.streamlit.app/) | [📖 Documentation](#-fonctionnalités) | [🚀 Installation](#-installation-locale)
 
-Vous pouvez accéder à l'application Streamlit en ligne ici : [https://josselinperret-excel-completer-streamlit-app-7ep3fi.streamlit.app/](https://josselinperret-excel-completer-streamlit-app-7ep3fi.streamlit.app/)
+</div>
 
-## Description
+## 🎯 Description
 
-Cette application permet de :
+Cette application web simple mais puissante vous permet de :
+
 - Importer un fichier Excel/CSV contenant des informations de composants
 - Importer un fichier texte de rapport de couverture de test
-- Mettre à jour le fichier Excel avec les données de couverture extraites du rapport
-- Télécharger le fichier Excel mis à jour
+- Mettre à jour automatiquement le fichier Excel avec les données de couverture
+- Télécharger le fichier mis à jour tout en préservant le formatage original
 
-## Fonctionnalités
+## ✨ Fonctionnalités
 
-- Interface utilisateur intuitive avec Streamlit
-- Extraction automatique des données de couverture à partir du rapport texte
-- Mise à jour du fichier Excel avec les pourcentages de couverture
-- Aperçu des données mises à jour avant téléchargement
-- Support pour les fichiers Excel (.xlsx) et CSV (.csv)
+| Fonctionnalité | Description |
+|----------------|-------------|
+| 🌐 **Interface moderne** | Interface utilisateur web intuitive propulsée par Streamlit |
+| 🔍 **Extraction intelligente** | Analyse automatique des données de couverture par expressions régulières |
+| 🔄 **Mise à jour précise** | Ajout ou mise à jour de la colonne "COVERAGE %" avec formatage approprié |
+| 👁️ **Aperçu instantané** | Visualisation des données mises à jour avant téléchargement |
+| 📁 **Format flexible** | Support pour les fichiers Excel (.xlsx) et CSV (.csv) |
+| 🎨 **Préservation du formatage** | Conservation du style et du formatage des fichiers Excel existants |
 
-## Comment utiliser l'application
+## 🚀 Guide d'utilisation
 
-### Utilisation en ligne
-1. Accédez à l'application sur [https://josselinperret-excel-completer-streamlit-app-7ep3fi.streamlit.app/](https://josselinperret-excel-completer-streamlit-app-7ep3fi.streamlit.app/)
-2. Téléchargez votre fichier Excel/CSV
-3. Téléchargez votre rapport de couverture (fichier texte)
-4. Cliquez sur "Traiter les fichiers"
-5. Téléchargez le fichier mis à jour
+### 🌐 Utilisation en ligne
 
-### Exécution locale
+Accédez directement à l'application déployée pour une utilisation immédiate sans installation :
+
+1. Ouvrez l'application sur [Streamlit Cloud](https://josselinperret-excel-completer-streamlit-app-7ep3fi.streamlit.app/)
+2. Importez votre fichier Excel/CSV via le sélecteur de fichier
+3. Importez votre rapport de couverture de test (fichier texte)
+4. Cliquez sur le bouton "Traiter les fichiers"
+5. Prévisualisez et téléchargez le fichier mis à jour
+
+### 💻 Installation locale
 
 #### Prérequis
+
 - Python 3.6 ou supérieur
 - pip (gestionnaire de paquets Python)
 
 #### Installation
-1. Clonez ce dépôt :
-   ```bash
-   git clone https://github.com/JosselinPerret/Excel-completer.git
-   cd Excel-completer
-   ```
 
-2. Installez les dépendances requises :
-   ```bash
-   pip install -r requirements.txt
-   ```
+1. Clonez le dépôt sur votre machine locale :
+
+```bash
+git clone https://github.com/JosselinPerret/Excel-completer.git
+cd Excel-completer
+```
+
+2. Créez un environnement virtuel (recommandé) et installez les dépendances :
+
+```bash
+python -m venv .venv
+source .venv/bin/activate  # Sur Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+```
 
 #### Exécution
-Pour lancer l'application Streamlit :
+
+Lancez l'application avec l'une des commandes suivantes :
+
 ```bash
+# Pour l'interface Streamlit (recommandé)
 streamlit run streamlit_app.py
 ```
 
-Pour lancer la version Tkinter (ancienne version) :
 ```bash
+# Pour l'ancienne interface Tkinter
 python coverage_excel.py
 ```
 
-## Structure du projet
+## 📂 Structure du projet
 
-- `streamlit_app.py` : Application principale utilisant Streamlit
-- `coverage_excel.py` : Ancienne version utilisant Tkinter
-- `requirements.txt` : Fichier listant les dépendances Python
-- `Plan_de_Test_par_Composant - CEBB3_SA_SB.xlsx` : Exemple de fichier Excel
-- `Plan_de_Test_par_Composant - CEBB3_SA_SB.csv` : Version CSV du fichier Excel
-- `ANALYZEREPORT CEBB3_SA_SB.txt` : Exemple de rapport de couverture
+| Fichier | Description |
+|---------|-------------|
+| `streamlit_app.py` | Application principale avec interface web Streamlit |
+| `coverage_excel.py` | Version alternative avec interface Tkinter |
+| `requirements.txt` | Liste des dépendances Python requises |
+| `Plan_de_Test_par_Composant - CEBB3_SA_SB.xlsx` | Exemple de fichier Excel d'entrée |
+| `Plan_de_Test_par_Composant - CEBB3_SA_SB.csv` | Version CSV de l'exemple |
+| `ANALYZEREPORT CEBB3_SA_SB.txt` | Exemple de rapport de couverture |
+| `README.md` | Documentation du projet |
 
-## Fonctionnement technique
+## ⚙️ Fonctionnement technique
 
-1. L'application extrait les données de couverture du rapport texte en utilisant des expressions régulières
-2. Elle recherche les composants dans le fichier Excel et met à jour la colonne "COVERAGE %"
-3. Pour les composants non trouvés dans le rapport, une valeur de "0%" est attribuée
-4. Le fichier Excel mis à jour est généré et prêt à être téléchargé
+1. **Extraction des données** : L'application analyse le rapport texte en utilisant des expressions régulières pour identifier les pourcentages de couverture par composant.
+   
+2. **Correspondance des données** : Elle associe les identifiants des composants du rapport avec ceux du fichier Excel.
+   
+3. **Mise à jour du fichier** : La colonne "COVERAGE %" est créée ou mise à jour avec les valeurs extraites, préservant le formatage original du fichier.
+   
+4. **Valeurs par défaut** : Pour les composants non trouvés dans le rapport, une valeur de "0%" est attribuée.
+   
+5. **Génération du fichier** : Le fichier Excel est mis à jour en mémoire puis proposé au téléchargement.
 
-## Format du rapport de couverture
+## 📄 Format des fichiers
+
+### Format du rapport de couverture
 
 L'application s'attend à trouver des informations de couverture dans le format suivant :
-```
+
+```text
 Test Summary for U10 (MC14519)
 ...
 Totals: 100.00%
@@ -89,7 +122,15 @@ Totals: 100.00%
 
 Où "U10" est l'identifiant du composant et "100.00%" est le pourcentage de couverture.
 
-## Format du fichier Excel/CSV
+### Format du fichier Excel/CSV
 
 Le fichier Excel/CSV doit contenir une colonne nommée "COMP." qui liste les identifiants des composants.
 Une colonne "COVERAGE %" sera ajoutée ou mise à jour avec les valeurs extraites du rapport.
+
+## 📊 Exemple de résultat
+
+Après traitement, le fichier Excel contiendra une colonne "COVERAGE %" formatée avec les pourcentages de couverture pour chaque composant identifié dans le rapport.
+
+## 📝 Licence
+
+Ce projet est distribué sous licence MIT. Vous êtes libre de l'utiliser, le modifier et le distribuer selon les termes de cette licence.
